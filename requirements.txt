@@ -1,0 +1,14 @@
+# TensorFlow bản support Python 3.12
+tensorflow==2.18.0
+tf-keras
+
+# Transformers (hỗ trợ NLP)
+transformers==4.48.0
+
+# spaCy mới hỗ trợ Python 3.12
+spacy==3.8.2
+pyvi==0.1.1
+
+# Flask server
+Flask==3.1.0
+Flask_Cors==5.0.0

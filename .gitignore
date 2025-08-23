@@ -1,0 +1,72 @@
+# ------------------------------
+# Python
+# ------------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pkl
+*.egg
+*.egg-info/
+.eggs/
+.Python
+*.db
+*.sqlite3
+*.sqlite
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# Byte-compiled
+*.so
+
+# ------------------------------
+# Flask
+# ------------------------------
+instance/
+*.pid
+
+# ------------------------------
+# PyCharm / IDE
+# ------------------------------
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# ------------------------------
+# OS generated files
+# ------------------------------
+.DS_Store
+Thumbs.db
+
+# ------------------------------
+# Docker
+# ------------------------------
+*.pid
+*.seed
+*.pid.lock
+docker-compose.override.yml
+
+# ------------------------------
+# Other
+# ------------------------------
+coverage/
+htmlcov/
+.cache/
+.mypy_cache/
+.pytest_cache/
+pytestdebug.log
+.tox/
