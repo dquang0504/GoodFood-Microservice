@@ -1,17 +1,107 @@
-# GoodFood-Microservice
-This microservice is part of the GoodFood e-commerce system, focusing on AI-driven content moderation and analysis.
-It is built with Python and Flask, and integrates state-of-the-art machine learning models to ensure a safe and high-quality user experience.
+#  GoodFood-Microservice 🤖
 
-Features: NSFW Content Detection – automatically filters out inappropriate or adult content in reviews and uploaded images.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/dquang0504/GoodFood-Microservice/main/assets/GoodFood-MS-cover.png" alt="GoodFood Microservice Banner" width="80%" />
+</p>
 
-Toxic Speech Detection – identifies abusive, hateful, or offensive language in user-generated text.
+<h3 align="center">
+  **Tagline:** *AI-powered microservice for safe & intelligent e-commerce experiences.*
+</h3>
 
-Violence Detection – detects violent or harmful content in text or images.
+<p align="center">
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.11-blue" /></a>
+  <a href="https://flask.palletsprojects.com/"><img src="https://img.shields.io/badge/Flask-2.3-lightgrey" /></a>
+  <a href="https://www.tensorflow.org/"><img src="https://img.shields.io/badge/TensorFlow-2.x-orange" /></a>
+  <a href="https://www.docker.com/"><img src="https://img.shields.io/badge/Docker-ready-blue" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" /></a>
+</p>
 
-Sentiment Analysis – classifies user reviews as positive, negative, neutral, or mixed for actionable insights.
+---
 
-Tech Stack: Python, Flask, TensorFlow, Hugging Face Transformers
+## 📋 Overview
 
-RESTful API for easy integration with the main GoodFood Backend
+GoodFood-Microservice is a dedicated **AI service** for the [GoodFood](https://github.com/dquang0504/GoodFood-BE) ecosystem.  
+It provides intelligent content moderation and analysis to ensure a safe, user-friendly environment for online food reviews and interactions.
 
-Dockerized deployment for scalability and maintainability
+Key features include:
+- 🛡️ **Toxic speech filtering** – detect and block abusive language  
+- 😀 **Sentiment analysis** – classify reviews as positive, negative, neutral, or mixed  
+- 🚫 **NSFW content detection** – prevent inappropriate content uploads  
+- ⚡ **Decoupled architecture** – exposed via REST APIs for modularity  
+- 🐳 **Dockerized deployment** – easy integration into the main system  
+
+---
+
+## 📂 Project Structure
+```bash
+GoodFood-Microservice/
+├── main.py/            # Flask app with routes & controllers
+├── configs/            # Configurations & environment settings
+├── tests/              # Unit and integration tests
+├── Dockerfile
+├── requirements.txt
+└── README.md
+```
+
+---
+
+## 🛠️ Tech Stack
+
+* Language: Python
+
+* Framework: Flask
+
+* Machine Learning: TensorFlow, Hugging Face Transformers
+
+* NLP & Moderation: Custom pipelines for toxicity, sentiment, and NSFW detection
+
+* API: REST API
+
+* Deployment: Docker
+
+* Testing: Pytest
+
+---
+
+## 🚀 Deployment
+
+Optimized for containerized environments:
+```bash
+# Build the Docker image
+docker build -t goodfood-microservice .
+
+# Run the container
+docker run -p 5000:5000 goodfood-microservice
+```
+
+The service will be available at: http://localhost:5000/api/...
+
+---
+
+## 📖 API Documentation
+
+Default Swagger docs available at:
+/swagger/ (to be added)
+
+Or test endpoints via Postman collection:
+➡️ GoodFood Microservice API Docs (coming soon)
+
+## 🤝 Contributing
+
+We welcome contributions!
+
+Fork the repo
+
+Create a new branch (feature/my-feature)
+
+Commit changes (git commit -m 'Add feature')
+
+Push the branch & open a Pull Request
+
+Please follow best practices for Python + Flask + NLP development.
+
+## 📜 License
+
+Distributed under the MIT License.
+See LICENSE
+ for more information.
