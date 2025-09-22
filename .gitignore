@@ -70,3 +70,4 @@ htmlcov/
 .pytest_cache/
 pytestdebug.log
 .tox/
+model_unquant.tflite

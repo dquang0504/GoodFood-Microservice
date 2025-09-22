@@ -2,6 +2,8 @@ import base64
 import os.path
 import tempfile
 
+import numpy as np
+import tensorflow as tf
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from transformers import pipeline, ViTForImageClassification, ViTFeatureExtractor
@@ -12,16 +14,27 @@ from nudenet import NudeDetector
 
 # ️️ Dùng sentence splitter đa ngôn ngữ
 splitter = SentenceSplitter(language='en')  # hoặc 'en', nhưng 'vi' vẫn tách được cả 2 tốt
-# 1️⃣ Toxic text detection pipeline
+# 1 Toxic text detection pipeline
 toxic_pipeline = pipeline(
     "text-classification",
     model="unitary/toxic-bert"  # Ví dụ model tiếng Anh chuyên detect toxicity
 )
-# 2️⃣ NSFW model
+# 2 NSFW model
 nsfw_classifier = NudeDetector()
-# 3️⃣ Violence detection model
+# 3 Violence detection model
 violence_model = ViTForImageClassification.from_pretrained("jaranohaal/vit-base-violence-detection")
 violence_extractor = ViTFeatureExtractor.from_pretrained("jaranohaal/vit-base-violence-detection")
+# 4 Load model TFLite for image recognition
+# Danh sách class names cho Image Classifier
+classNames = [
+    "Bánh flan", "Bánh mì ngọt", "Bánh mochi", "Bánh tiramisu",
+    "Chè thái", "Cơm bò lúc lắc", "Cơm cá chiên", "Cơm chiên dương châu", "Cơm gà", "Cơm tấm",
+    "Cơm thịt kho", "Cơm xá xíu", "Kem dừa", "Kem socola", "Nước ngọt 7up", "Nước ngọt coca-cola",
+    "Nước ngọt pepsi", "Nước ngọt sprite", "Nước tăng lực red bull", "Nước tăng lực sting", "Thịt bò hầm tiêu xanh",
+    "Thịt heo quay"
+]
+interpreter = tf.lite.Interpreter(model_path="model_unquant.tflite")
+interpreter.allocate_tensors()
 
 app = Flask(__name__)
 app.debug = True
@@ -155,7 +168,7 @@ def is_image_violent(image_path):
         score = probs[pred_idx].item() * 100
 
         # Nhãn gốc như Space
-        violence_labels = ["Non-Violent", "Violent"]
+        violence_labels = ["Violent", "Non-Violent"]
         violence_label = violence_labels[pred_idx]  # Chuẩn giống Space
 
         # In debug
@@ -243,6 +256,38 @@ def detect_review():
     except Exception as e:
         print(f"Error occurred: {str(e)}")
         return jsonify({"error": "Đã xảy ra lỗi", "details": str(e)}), 500
+
+
+# Hàm xử lý ảnh
+def preprocess_image(file, target_size):
+    image = Image.open(file).resize(target_size)
+    image = np.array(image).astype(np.float32)
+    image = image / 255.0  # Chuẩn hóa về [0, 1]
+    image = np.expand_dims(image, axis=0)
+    return image
+
+
+# Dự đoán lớp của ảnh
+def predict_image(file):
+    input_shape = interpreter.get_input_details()[0]['shape'][1:3]
+    input_data = preprocess_image(file, input_shape)
+    interpreter.set_tensor(interpreter.get_input_details()[0]['index'], input_data)
+    interpreter.invoke()
+    output_data = interpreter.get_tensor(interpreter.get_output_details()[0]['index'])
+    predicted_index = np.argmax(output_data)
+    predicted_class = classNames[predicted_index]
+    return predicted_class, output_data[0][predicted_index]
+
+
+# API nhận diện ảnh
+@app.route('/callModel', methods=['POST'])
+@cross_origin(supports_credentials=True)
+def call_model():
+    if 'file' not in request.files:
+        return jsonify({"message": "Failed", "reason": "Invalid json"}), 400
+    file = request.files['file']
+    predicted_class, confidence = predict_image(file)
+    return jsonify({"message": "Success", "productName": predicted_class, "accuracy": float(confidence)}), 200
 
 
 if __name__ == '__main__':
