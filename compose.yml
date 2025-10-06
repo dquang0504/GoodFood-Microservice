@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  microservice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: goodfood-microservice
+    environment:
+      - MODEL_PATH=/app/models/model_unquant.tflite
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./models:/app/models

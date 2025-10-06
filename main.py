@@ -33,7 +33,8 @@ classNames = [
     "Nước ngọt pepsi", "Nước ngọt sprite", "Nước tăng lực red bull", "Nước tăng lực sting", "Thịt bò hầm tiêu xanh",
     "Thịt heo quay"
 ]
-interpreter = tf.lite.Interpreter(model_path="model_unquant.tflite")
+model_path = os.getenv("MODEL_PATH", "model_unquant.tflite")
+interpreter = tf.lite.Interpreter(model_path=model_path)
 interpreter.allocate_tensors()
 
 app = Flask(__name__)
@@ -48,7 +49,7 @@ sent_pipeline = pipeline("text-classification", model=model_path)
 # Hàm phân tách câu
 def split_into_clauses(sentence):
     """
-    Chia văn bản thành các cụm câu dựa trên mô hình xử lý tiếng Việt của SpaCy.
+    Chia văn bản thành các cụm câu dựa trên mô hình xử lý tiếng Việt.
     """
     clauses = splitter.split(text=sentence)
     print(clauses)
