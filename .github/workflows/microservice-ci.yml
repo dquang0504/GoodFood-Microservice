@@ -50,6 +50,7 @@ jobs:
       # 6. Run tests with coverage
       - name: Run tests with coverage
         run: |
+          export PYTHONPATH=.
           pytest --cov=./ --cov-report=xml
 
       # 7. Upload coverage to Codecov
