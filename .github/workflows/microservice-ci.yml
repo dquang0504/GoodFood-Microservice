@@ -3,11 +3,10 @@ name: Python Microservice
 on:
   push:
     branches: ["main","develop"]
-  pull:
+  pull_request:
     branches: ["main"]
-
-  permissions:
-    contents: read
+permissions:
+  contents: read
 
 jobs:
   ci:
@@ -55,7 +54,7 @@ jobs:
 
       # 7. Upload coverage to Codecov
       - name: Upload coverage
-        uses: codecov/codecov-actions@v3
+        uses: codecov/codecov-action@v3
         with:
           fail_ci_if_error: true
 
