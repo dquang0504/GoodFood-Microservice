@@ -51,6 +51,7 @@ jobs:
       - name: Run tests with coverage
         run: |
           export PYTHONPATH=.
+          export MODEL_PATH=models/model_unquant.tflite
           pytest --cov=./ --cov-report=xml
 
       # 7. Upload coverage to Codecov
