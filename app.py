@@ -3,6 +3,7 @@ from flask_cors import CORS, cross_origin
 from services.text_service import split_into_clauses, analyze_clauses, generate_summary
 from services.image_service import is_image_nsfw, is_image_violent, predict_image
 from models.toxic import toxic_pipeline
+from models.sentiment import sent_pipeline
 
 import base64, tempfile, os
 

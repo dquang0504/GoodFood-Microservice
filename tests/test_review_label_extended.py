@@ -14,7 +14,7 @@ def client():
 @patch("models.toxic.toxic_pipeline", return_value=[{"label": "toxic", "score": 0.9}])
 def test_review_label_toxic_and_nsfw(mock_toxic, mock_violent, mock_nsfw, client):
     response = client.post("/reviewLabel", json={
-        "review": "Đồ ăn dở tệ",
+        "review": "You are a stupid fuck!",
         "images": {"bad.jpg": "fakebase64"}
     })
     assert response.status_code == 200
