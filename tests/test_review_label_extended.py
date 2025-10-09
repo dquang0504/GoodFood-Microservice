@@ -13,7 +13,7 @@ def client():
 @patch("services.image_service.is_image_violent", return_value=(True, "Violent", 95.0))
 @patch("models.toxic.toxic_pipeline", return_value=[{"label": "toxic", "score": 0.9}])
 @patch("base64.b64decode", return_value=b"fakebytes")
-def test_review_label_toxic_and_nsfw(mock_toxic, mock_violent, mock_nsfw, client):
+def test_review_label_toxic_and_nsfw(mock_b64, mock_toxic, mock_violent, mock_nsfw, client):
     response = client.post("/reviewLabel", json={
         "review": "You are a stupid fuck!",
         "images": {"bad.jpg": "fakebase64"}
@@ -22,4 +22,4 @@ def test_review_label_toxic_and_nsfw(mock_toxic, mock_violent, mock_nsfw, client
     data = response.get_json()
     assert data["label"] == "toxic"
     assert data["images"][0]["nsfw"] is True
-    assert data["images"][0]["violent"] is True
+    assert data["images"][0]["class"] == "GENITALIA_EXPOSED"
