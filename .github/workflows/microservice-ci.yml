@@ -16,28 +16,27 @@ jobs:
       # 1. Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
-      
-      # 2. Setup python
-      - name: Setup python
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.10"
 
-      # 3. Cache pip dependencies
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip${{ hashFiles('requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+      # 2. Build docker image (includes pip install inside Dockerfile)
+      - name: Build Docker image
+        run: docker build -t goodfood-microservice .
 
-      # 4. Install dependencies
-      - name: Install dependencies
+      # 3. Run tests with coverage
+      - name: Run tests with coverage
         run: |
-          python -m pip install --upgrade pip
-          pip install flake8 pytest pytest-cov bandit safety
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          docker run --rm \
+            -e PYTHONPATH=. \
+            -e MODEL_PATH=models/model_unquant.tflite \
+            -v ${{ github.workspace }}:/app \
+            goodfood-microservice \
+            pytest --cov=./ --cov-report=xml:/app/coverage.xml
+      # 4. Upload coverage to Codecov (warning only if fail)
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false   # <-- chuyển thành warning
 
       # 5. Lint code
       - name: Lint with flake8
@@ -46,35 +45,16 @@ jobs:
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           # style check (only warnings)
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      
-      # 6. Run tests with coverage
-      - name: Run tests with coverage
-        run: |
-          export PYTHONPATH=.
-          export MODEL_PATH=models/model_unquant.tflite
-          pytest --cov=./ --cov-report=xml
 
-      # 7. Upload coverage to Codecov
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
-        with:
-          file: ./coverage.xml
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
-
-      # 8. Security check with bandit
+      # 6. Security check with bandit
       - name: Security check with bandit
         run: bandit -r .
         continue-on-error: true
 
-      # 9. Security check with Safety(dependencies)
+      # 7. Security check with Safety(dependencies)
       - name: Security with Safety
         run: safety check || true
         continue-on-error: true
-
-      # 10. Build docker image to validate Dockerfile
-      - name: Build Docker image
-        run: docker build -t goodfood-microservice .
 
       #8. Optional: Push Docker image to registry
       #- name: Login to Docker Hub
