@@ -14,6 +14,9 @@
   <a href="https://www.tensorflow.org/"><img src="https://img.shields.io/badge/TensorFlow-2.x-orange" /></a>
   <a href="https://www.docker.com/"><img src="https://img.shields.io/badge/Docker-ready-blue" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" /></a>
+  <a href="https://codecov.io/gh/dquang0504/GoodFood-Microservice">
+    <img src="https://codecov.io/gh/dquang0504/GoodFood-Microservice/branch/main/graph/badge.svg" alt="Coverage"/>
+  </a>
 </p>
 
 ---
