@@ -13,6 +13,9 @@ COPY requirements.txt ./
 # Install requirements
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Dependencies for testing
+RUN pip install --no-cache-dir pytest pytest-cov flake8 bandit safety
+
 # Copy code into container
 COPY . .
 
