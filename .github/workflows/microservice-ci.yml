@@ -41,19 +41,17 @@ jobs:
       # 5. Lint code
       - name: Lint with flake8
         run: |
-          # strict check (fail if errors)
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # style check (only warnings)
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          docker run --rm goodfood-microservice flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          docker run --rm goodfood-microservice flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
       # 6. Security check with bandit
       - name: Security check with bandit
-        run: bandit -r .
+        run: docker run --rm goodfood-microservice bandit -r .
         continue-on-error: true
 
       # 7. Security check with Safety(dependencies)
       - name: Security with Safety
-        run: safety check || true
+        run: docker run --rm goodfood-microservice safety check || true
         continue-on-error: true
 
       #8. Optional: Push Docker image to registry
