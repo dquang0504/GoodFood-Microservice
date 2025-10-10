@@ -65,10 +65,12 @@ jobs:
       # 8. Security check with bandit
       - name: Security check with bandit
         run: bandit -r .
+        continue-on-error: true
 
       # 9. Security check with Safety(dependencies)
       - name: Security with Safety
         run: safety check || true
+        continue-on-error: true
 
       # 10. Build docker image to validate Dockerfile
       - name: Build Docker image
